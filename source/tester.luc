@@ -1,0 +1,91 @@
+module tester
+(         
+    //the opcode being selected
+    input alufn[6],   
+    input b_dip[16],
+
+    //the ans from our alu     
+    input alu_out[16],
+    
+    //the a and b values being passed into the aluout
+    output a_out[16],
+    output b_out[16],
+    output out
+) {
+    sig a[16];
+    sig b[16];
+    sig add_ans[16];
+    sig sub_ans[16];
+    //sig div_ans[16];
+    sig mult_ans[16];
+    sig shl_ans[16];
+    sig shr_ans[16];
+    sig sra_ans[16];
+  
+    always {
+        a = 16b1111110010111000;
+        b = b_dip[15:0];
+        add_ans = a+b;
+        sub_ans = a-b;
+        mult_ans = a*b;
+        shl_ans = a << b;
+        shr_ans = a >> b;
+        sra_ans = $signed(a)>>>b;
+        out = 0;
+
+        //output these
+        a_out = a;
+        b_out = b;
+
+        case(alufn)
+        {
+            //addition
+            6b000000:
+                out = (alu_out == add_ans);
+            
+            //subtraction
+            6b000001:
+                out = (alu_out == sub_ans);
+            
+            //multiplication
+            6b000010:
+                out = (alu_out == mult_ans);
+
+            //false addition
+            6b000011:
+                out = (alu_out == add_ans);
+            //shift left
+            6b100000:
+                out = (alu_out == shl_ans);
+            //shift right
+            6b100001:
+                out = (alu_out == shr_ans);        
+            //arithmetic right 
+            6b100011:               
+                out = (alu_out == sra_ans);
+            //and
+            6b011000:
+                out = (alu_out == (a & b));
+            //or
+            6b011110:
+                out =  (alu_out == (a | b));
+            //xor
+            6b010110:
+                out =  (alu_out == (a ^ b));
+            //ldr
+            6b011010:
+                out =  (alu_out == a);
+            //equal
+            6b110011:
+                out = (alu_out == (a == b)); 
+            //less
+            6b110011:
+                out = (alu_out == (a < b)); 
+            //less or equal
+            6b110011:
+                out = (alu_out == (a <= b)); 
+    
+     
+        }        
+    }
+}

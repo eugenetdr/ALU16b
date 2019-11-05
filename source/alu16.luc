@@ -1,0 +1,53 @@
+module alu16
+(
+    input a[16],
+    input b[16],
+    input alufn[6],
+    
+    output out[16]
+) {
+    adder16 adder;
+    compare16 compare;
+    boolean16 boole;
+    shift16 shift;
+    sig z;
+    sig v;
+    sig n;
+
+    always{
+        out = 0;
+    
+        adder.alufn = alufn;
+        adder.a = a;                
+        adder.b = b;  
+
+        z = adder.z;              
+        v = adder.v;              
+        n = adder.n;              
+        
+        boole.alufn = alufn;
+        boole.a = a;                
+        boole.b = b;                  
+        
+        shift.alufn = alufn;
+        shift.a = a;                
+        shift.b = b;         
+
+        compare.alufn = alufn;
+        compare.z = adder.z; 
+        compare.v = adder.v;
+        compare.n = adder.n;          
+
+        case(alufn[5:4])
+        {
+            2b00:
+                out = adder.out;                
+            2b01:
+                out = boole.out;                
+            2b10:
+                out = shift.out;                
+            2b11:
+                out = compare.out;                
+        }
+    }
+}

@@ -1,0 +1,25 @@
+module shift16
+(
+    input a[16],
+    input b[16],
+    input alufn[6],
+    output out[16]
+)
+{
+    always {
+        out = 0;
+        case(alufn[1:0])
+        {
+            //SHL
+            2b00:
+                out = a << b;
+            //SRA
+            2b11:
+                out = $signed(a)>>>b;
+            //SHR
+            2b01:
+                out = a >> b;
+
+        }
+    }
+}
