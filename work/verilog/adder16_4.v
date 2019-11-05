@@ -21,26 +21,22 @@ module adder16_4 (
   always @* begin
     s = 1'h0;
     z = 1'h0;
-    
-    case (alufn[0+1-:2])
-      2'h0: begin
+    if (alufn[0+0-:1] == 1'h0) begin
+      if (alufn[1+0-:1] == 1'h0) begin
         s = a + b;
       end
-      2'h1: begin
-        s = a - b;
-      end
-      2'h2: begin
+      if (alufn[1+0-:1] == 1'h1) begin
         s = a * b;
       end
-      2'h3: begin
-        s = $signed(11'h4b9);
-      end
-    endcase
+    end
+    if (alufn[0+0-:1] == 1'h1) begin
+      s = a - b;
+    end
     out = s;
     if (s == 1'h0) begin
       z = 1'h1;
     end
     v = (a[15+0-:1] && b[15+0-:1] && !s[15+0-:1]) || (!a[15+0-:1] && !b[15+0-:1] && s[15+0-:1]);
-    n = b[15+0-:1];
+    n = s[15+0-:1];
   end
 endmodule

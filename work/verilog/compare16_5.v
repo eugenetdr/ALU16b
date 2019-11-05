@@ -15,20 +15,17 @@ module compare16_5 (
   
   
   always @* begin
-    out[0+15-:16] = 16'h0000;
+    out[0+15-:16] = 1'h0;
     
     case (alufn[1+1-:2])
       2'h1: begin
         out[0+0-:1] = z;
-        out[1+14-:15] = 15'h0000;
       end
       2'h2: begin
         out[0+0-:1] = n ^ v;
-        out[1+14-:15] = 15'h0000;
       end
       2'h3: begin
         out[0+0-:1] = z | (n ^ v);
-        out[1+14-:15] = 15'h0000;
       end
     endcase
   end

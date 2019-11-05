@@ -59,5 +59,11 @@ module alu16
             2b11: //SELECT COMPARE
                 out = compare.out;                
         }
+
+        //test case for erroneous output
+        if(alufn[5:0] == 6b111111)
+        {
+            out = -839;
+        }
     }
 }

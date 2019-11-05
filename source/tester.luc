@@ -52,8 +52,8 @@ module tester
                 out = (alu_out == mult_ans);
 
             //false addition
-            6b000011:
-                out = (alu_out == add_ans);
+            6b111111:
+                out = (alu_out == (a+b));
             //shift left
             6b100000:
                 out = (alu_out == shl_ans);
@@ -79,10 +79,10 @@ module tester
             6b110011:
                 out = (alu_out == (a == b)); 
             //less
-            6b110011:
+            6b110101:
                 out = (alu_out == (a < b)); 
             //less or equal
-            6b110011:
+            6b110111:
                 out = (alu_out == (a <= b)); 
     
      

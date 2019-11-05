@@ -104,5 +104,8 @@ module alu16_2 (
         out = M_compare_out;
       end
     endcase
+    if (alufn[0+5-:6] == 6'h3f) begin
+      out = $signed(11'h4b9);
+    end
   end
 endmodule

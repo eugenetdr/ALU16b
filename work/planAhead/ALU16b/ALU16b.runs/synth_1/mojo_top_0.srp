@@ -3,7 +3,7 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 --> 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.09 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> Reading design: mojo_top_0.prj
 
@@ -120,22 +120,21 @@ Unit <mojo_top_0> synthesized.
 
 Synthesizing Unit <alu16_2>.
     Related source file is "C:/Users/eugen/Desktop/Comp Struct/Mojo/ALU16b/work/planAhead/ALU16b/ALU16b.srcs/sources_1/imports/verilog/alu16_2.v".
-    Found 16-bit 4-to-1 multiplexer for signal <out> created at line 93.
+    Found 16-bit 4-to-1 multiplexer for signal <alufn[5]_M_compare_out[15]_wide_mux_0_OUT> created at line 93.
     Summary:
-	inferred   1 Multiplexer(s).
+	inferred   2 Multiplexer(s).
 Unit <alu16_2> synthesized.
 
 Synthesizing Unit <adder16_4>.
     Related source file is "C:/Users/eugen/Desktop/Comp Struct/Mojo/ALU16b/work/planAhead/ALU16b/ALU16b.srcs/sources_1/imports/verilog/adder16_4.v".
 WARNING:Xst:647 - Input <alufn<5:2>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-    Found 16-bit subtractor for signal <a[15]_b[15]_sub_2_OUT> created at line 30.
-    Found 16-bit adder for signal <a[15]_b[15]_add_0_OUT> created at line 27.
-    Found 16x16-bit multiplier for signal <n0022> created at line 33.
-    Found 16-bit 4-to-1 multiplexer for signal <s> created at line 25.
+    Found 16-bit subtractor for signal <a[15]_b[15]_sub_10_OUT> created at line 33.
+    Found 16-bit adder for signal <a[15]_b[15]_add_2_OUT> created at line 26.
+    Found 16x16-bit multiplier for signal <n0029> created at line 29.
     Summary:
 	inferred   1 Multiplier(s).
 	inferred   1 Adder/Subtractor(s).
-	inferred   2 Multiplexer(s).
+	inferred   8 Multiplexer(s).
 Unit <adder16_4> synthesized.
 
 Synthesizing Unit <compare16_5>.
@@ -157,8 +156,8 @@ Synthesizing Unit <shift16_7>.
     Related source file is "C:/Users/eugen/Desktop/Comp Struct/Mojo/ALU16b/work/planAhead/ALU16b/ALU16b.srcs/sources_1/imports/verilog/shift16_7.v".
 WARNING:Xst:647 - Input <alufn<5:2>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
     Found 16-bit shifter logical left for signal <a[15]_b[15]_shift_left_0_OUT> created at line 21
-    Found 16-bit shifter arithmetic right for signal <a[15]_b[15]_shift_right_1_OUT> created at line 24
-    Found 16-bit shifter logical right for signal <a[15]_b[15]_shift_right_2_OUT> created at line 27
+    Found 16-bit shifter logical right for signal <a[15]_b[15]_shift_right_1_OUT> created at line 24
+    Found 16-bit shifter arithmetic right for signal <a[15]_b[15]_shift_right_2_OUT> created at line 27
     Found 16-bit 4-to-1 multiplexer for signal <out> created at line 19.
     Summary:
 	inferred   4 Multiplexer(s).
@@ -169,29 +168,29 @@ Synthesizing Unit <tester_3>.
     Related source file is "C:/Users/eugen/Desktop/Comp Struct/Mojo/ALU16b/work/planAhead/ALU16b/ALU16b.srcs/sources_1/imports/verilog/tester_3.v".
     Found 16-bit subtractor for signal <sub_ans> created at line 38.
     Found 16-bit adder for signal <add_ans> created at line 37.
-    Found 16x16-bit multiplier for signal <n0088> created at line 39.
+    Found 16x16-bit multiplier for signal <n0052> created at line 39.
     Found 16-bit shifter logical left for signal <shl_ans> created at line 28
     Found 16-bit shifter logical right for signal <shr_ans> created at line 30
     Found 16-bit shifter arithmetic right for signal <sra_ans> created at line 32
     Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_7_o> created at line 49
     Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_8_o> created at line 52
     Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_9_o> created at line 55
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_11_o> created at line 61
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_12_o> created at line 64
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_13_o> created at line 67
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_15_o> created at line 70
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_17_o> created at line 73
-    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_19_o> created at line 76
-    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_22_o> created at line 82
-    Found 16-bit comparator greater for signal <PWR_9_o_b_dip[15]_LessThan_23_o> created at line 85
-    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_24_o> created at line 85
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_12_o> created at line 61
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_13_o> created at line 64
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_14_o> created at line 67
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_16_o> created at line 70
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_18_o> created at line 73
+    Found 16-bit comparator equal for signal <alu_out[15]_PWR_9_o_equal_20_o> created at line 76
+    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_23_o> created at line 82
+    Found 16-bit comparator greater for signal <PWR_9_o_b_dip[15]_LessThan_24_o> created at line 85
+    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_25_o> created at line 85
     Found 16-bit comparator lessequal for signal <n0023> created at line 88
-    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_26_o> created at line 88
+    Found 16-bit comparator equal for signal <alu_out[15]_GND_11_o_equal_27_o> created at line 88
     Summary:
 	inferred   1 Multiplier(s).
 	inferred   2 Adder/Subtractor(s).
 	inferred  14 Comparator(s).
-	inferred  17 Multiplexer(s).
+	inferred   3 Multiplexer(s).
 	inferred   3 Combinational logic shifter(s).
 Unit <tester_3> synthesized.
 
@@ -209,9 +208,8 @@ Macro Statistics
  16-bit comparator equal                               : 12
  16-bit comparator greater                             : 1
  16-bit comparator lessequal                           : 1
-# Multiplexers                                         : 25
- 1-bit 2-to-1 multiplexer                              : 14
- 16-bit 2-to-1 multiplexer                             : 8
+# Multiplexers                                         : 18
+ 16-bit 2-to-1 multiplexer                             : 15
  16-bit 4-to-1 multiplexer                             : 3
 # Logic shifters                                       : 6
  16-bit shifter arithmetic right                       : 2
@@ -245,9 +243,8 @@ Macro Statistics
  16-bit comparator equal                               : 12
  16-bit comparator greater                             : 1
  16-bit comparator lessequal                           : 1
-# Multiplexers                                         : 25
- 1-bit 2-to-1 multiplexer                              : 14
- 16-bit 2-to-1 multiplexer                             : 8
+# Multiplexers                                         : 18
+ 16-bit 2-to-1 multiplexer                             : 15
  16-bit 4-to-1 multiplexer                             : 3
 # Logic shifters                                       : 6
  16-bit shifter arithmetic right                       : 2
@@ -269,7 +266,7 @@ Optimizing unit <tester_3> ...
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 0) on block mojo_top_0, actual ratio is 6.
+Found area constraint ratio of 100 (+ 0) on block mojo_top_0, actual ratio is 7.
 
 Final Macro Processing ...
 
@@ -298,18 +295,18 @@ Top Level Output File Name         : mojo_top_0.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 395
+# BELS                             : 406
 #      GND                         : 3
 #      INV                         : 16
 #      LUT1                        : 13
-#      LUT2                        : 9
-#      LUT3                        : 27
-#      LUT4                        : 14
-#      LUT5                        : 29
-#      LUT6                        : 146
+#      LUT2                        : 15
+#      LUT3                        : 22
+#      LUT4                        : 29
+#      LUT5                        : 30
+#      LUT6                        : 139
 #      MUXCY                       : 87
 #      MUXF7                       : 3
-#      VCC                         : 3
+#      VCC                         : 4
 #      XORCY                       : 45
 # IO Buffers                       : 72
 #      IBUF                        : 22
@@ -325,14 +322,14 @@ Selected Device : 6slx9tqg144-2
 
 
 Slice Logic Utilization: 
- Number of Slice LUTs:                  254  out of   5720     4%  
-    Number used as Logic:               254  out of   5720     4%  
+ Number of Slice LUTs:                  264  out of   5720     4%  
+    Number used as Logic:               264  out of   5720     4%  
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:    254
-   Number with an unused Flip Flop:     254  out of    254   100%  
-   Number with an unused LUT:             0  out of    254     0%  
-   Number of fully used LUT-FF pairs:     0  out of    254     0%  
+ Number of LUT Flip Flop pairs used:    264
+   Number with an unused Flip Flop:     264  out of    264   100%  
+   Number with an unused LUT:             0  out of    264     0%  
+   Number of fully used LUT-FF pairs:     0  out of    264     0%  
    Number of unique control sets:         0
 
 IO Utilization: 
@@ -373,7 +370,7 @@ Speed Grade: -2
    Minimum period: No path found
    Minimum input arrival time before clock: No path found
    Maximum output required time after clock: No path found
-   Maximum combinational path delay: 20.149ns
+   Maximum combinational path delay: 22.522ns
 
 Timing Details:
 ---------------
@@ -381,41 +378,47 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 163071 / 24
+  Total number of paths / destination ports: 1022818 / 24
 -------------------------------------------------------------------------
-Delay:               20.149ns (Levels of Logic = 19)
-  Source:            io_dip<3> (PAD)
+Delay:               22.522ns (Levels of Logic = 25)
+  Source:            io_dip<2> (PAD)
   Destination:       io_led<23> (PAD)
 
-  Data Path: io_dip<3> to io_led<23>
+  Data Path: io_dip<2> to io_led<23>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            77   1.328   2.030  io_dip_3_IBUF (M_test_b_out<3>)
-     begin scope: 'alu:b<3>'
-     begin scope: 'alu/adder:b<3>'
-     DSP48A1:A3->M9        2   3.265   1.156  Mmult_n0022 (n0022<9>)
-     end scope: 'alu/adder:n0022<9>'
-     LUT6:I1->O            1   0.254   0.958  Mmux_out38 (Mmux_out38)
-     LUT4:I0->O            1   0.254   0.958  Mmux_out39 (Mmux_out39)
+     IBUF:I->O            73   1.328   1.998  io_dip_2_IBUF (M_test_b_out<2>)
+     begin scope: 'alu:b<2>'
+     begin scope: 'alu/adder:b<2>'
+     DSP48A1:A2->M3        2   3.265   0.954  Mmult_n0029 (n0029<3>)
+     LUT3:I0->O            0   0.235   0.000  Mmux_s_A101 (Mmux_s_rs_A<3>)
+     MUXCY:DI->O           1   0.181   0.000  Mmux_s_rs_cy<3> (Mmux_s_rs_cy<3>)
+     MUXCY:CI->O           1   0.023   0.000  Mmux_s_rs_cy<4> (Mmux_s_rs_cy<4>)
+     MUXCY:CI->O           1   0.023   0.000  Mmux_s_rs_cy<5> (Mmux_s_rs_cy<5>)
+     XORCY:CI->O           2   0.206   1.181  Mmux_s_rs_xor<6> (out<6>)
+     end scope: 'alu/adder:out<6>'
+     LUT6:I0->O            1   0.254   1.137  Mmux_out36 (Mmux_out37)
+     LUT6:I0->O            1   0.254   0.682  Mmux_out39 (Mmux_out310)
+     LUT4:I3->O            1   0.254   0.958  Mmux_out310_SW0 (N7)
      LUT6:I2->O           11   0.254   1.494  Mmux_out310 (out<0>)
      end scope: 'alu:out<0>'
      begin scope: 'test:alu_out<0>'
-     LUT6:I0->O            1   0.254   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_lut<0> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_lut<0>)
-     MUXCY:S->O            1   0.215   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<0> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<0>)
-     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<1> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<1>)
-     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<2> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<2>)
-     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<3> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<3>)
-     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<4> (Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<4>)
-     MUXCY:CI->O           2   0.235   1.002  Mcompar_alu_out[15]_PWR_9_o_equal_7_o_cy<5> (alu_out[15]_PWR_9_o_equal_7_o)
-     LUT6:I2->O            1   0.254   0.910  Mmux_out415 (Mmux_out414)
-     LUT5:I2->O            1   0.235   0.910  Mmux_out417 (Mmux_out416)
-     LUT4:I1->O            8   0.235   0.943  Mmux_out418 (out)
+     LUT6:I0->O            1   0.254   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_lut<0> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_lut<0>)
+     MUXCY:S->O            1   0.215   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<0> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<0>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<1> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<1>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<2> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<2>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<3> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<3>)
+     MUXCY:CI->O           1   0.023   0.000  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<4> (Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<4>)
+     MUXCY:CI->O           1   0.235   0.958  Mcompar_alu_out[15]_PWR_9_o_equal_8_o_cy<5> (alu_out[15]_PWR_9_o_equal_8_o)
+     LUT6:I2->O            1   0.254   0.790  out11 (out11)
+     LUT6:I4->O            1   0.250   0.682  out13 (out13)
+     LUT6:I5->O            8   0.254   0.943  out116 (out)
      end scope: 'test:out'
      OBUF:I->O                 2.912          io_led_23_OBUF (io_led<23>)
     ----------------------------------------
-    Total                     20.149ns (9.788ns logic, 10.361ns route)
-                                       (48.6% logic, 51.4% route)
+    Total                     22.522ns (10.745ns logic, 11.777ns route)
+                                       (47.7% logic, 52.3% route)
 
 =========================================================================
 
@@ -425,12 +428,12 @@ Cross Clock Domains Report:
 =========================================================================
 
 
-Total REAL time to Xst completion: 7.00 secs
-Total CPU time to Xst completion: 7.56 secs
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 5.17 secs
  
 --> 
 
-Total memory usage is 233032 kilobytes
+Total memory usage is 233544 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   16 (   0 filtered)

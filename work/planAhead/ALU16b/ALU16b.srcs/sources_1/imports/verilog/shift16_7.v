@@ -20,11 +20,11 @@ module shift16_7 (
       2'h0: begin
         out = a << b;
       end
-      2'h3: begin
-        out = $signed(a) >>> b;
-      end
       2'h1: begin
         out = a >> b;
+      end
+      2'h3: begin
+        out = $signed(a) >>> b;
       end
     endcase
   end

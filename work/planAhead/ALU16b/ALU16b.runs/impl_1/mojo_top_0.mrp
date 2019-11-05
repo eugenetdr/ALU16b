@@ -8,7 +8,7 @@ Target Device  : xc6slx9
 Target Package : tqg144
 Target Speed   : -2
 Mapper Version : spartan6 -- $Revision: 1.55 $
-Mapped Date    : Tue Nov 05 16:01:54 2019
+Mapped Date    : Tue Nov 05 23:24:03 2019
 
 Design Summary
 --------------
@@ -16,11 +16,11 @@ Number of errors:      0
 Number of warnings:    6
 Slice Logic Utilization:
   Number of Slice Registers:                     0 out of  11,440    0%
-  Number of Slice LUTs:                        238 out of   5,720    4%
-    Number used as logic:                      237 out of   5,720    4%
-      Number using O6 output only:             176
+  Number of Slice LUTs:                        232 out of   5,720    4%
+    Number used as logic:                      231 out of   5,720    4%
+      Number using O6 output only:             168
       Number using O5 output only:              12
-      Number using O5 and O6:                   49
+      Number using O5 and O6:                   51
       Number used as ROM:                        0
     Number used as Memory:                       0 out of   1,440    0%
     Number used exclusively as route-thrus:      1
@@ -29,12 +29,12 @@ Slice Logic Utilization:
       Number with other load:                    0
 
 Slice Logic Distribution:
-  Number of occupied Slices:                    88 out of   1,430    6%
+  Number of occupied Slices:                    90 out of   1,430    6%
   Number of MUXCYs used:                       112 out of   2,860    3%
-  Number of LUT Flip Flop pairs used:          238
-    Number with an unused Flip Flop:           238 out of     238  100%
-    Number with an unused LUT:                   0 out of     238    0%
-    Number of fully used LUT-FF pairs:           0 out of     238    0%
+  Number of LUT Flip Flop pairs used:          232
+    Number with an unused Flip Flop:           232 out of     232  100%
+    Number with an unused LUT:                   0 out of     232    0%
+    Number of fully used LUT-FF pairs:           0 out of     232    0%
     Number of slice register sites lost
       to control set restrictions:               0 out of  11,440    0%
 
@@ -71,11 +71,11 @@ Specific Feature Utilization:
   Number of STARTUPs:                            0 out of       1    0%
   Number of SUSPEND_SYNCs:                       0 out of       1    0%
 
-Average Fanout of Non-Clock Nets:                4.11
+Average Fanout of Non-Clock Nets:                4.09
 
 Peak Memory Usage:  281 MB
-Total REAL time to MAP completion:  6 secs 
-Total CPU time to MAP completion (all processors):   6 secs 
+Total REAL time to MAP completion:  5 secs 
+Total CPU time to MAP completion (all processors):   5 secs 
 
 Table of Contents
 -----------------
@@ -140,7 +140,7 @@ INFO:Pack:1650 - Map created a placed design.
 Section 4 - Removed Logic Summary
 ---------------------------------
   12 block(s) removed
-   6 block(s) optimized away
+   7 block(s) optimized away
    6 signal(s) removed
 
 Section 5 - Removed Logic
@@ -174,6 +174,7 @@ Optimized Block(s):
 TYPE 		BLOCK
 GND 		XST_GND
 VCC 		XST_VCC
+VCC 		alu/VCC
 GND 		alu/adder/XST_GND
 VCC 		alu/adder/XST_VCC
 VCC 		test/CC

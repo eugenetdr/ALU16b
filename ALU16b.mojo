@@ -3,8 +3,8 @@
   <files>
     <src>alu16.luc</src>
     <src>boolean16.luc</src>
-    <src>tester.luc</src>
     <src>compare16.luc</src>
+    <src>tester.luc</src>
     <src>shift16.luc</src>
     <src top="true">mojo_top.luc</src>
     <src>adder16.luc</src>

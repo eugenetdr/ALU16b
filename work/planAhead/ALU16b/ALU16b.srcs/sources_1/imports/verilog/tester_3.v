@@ -54,8 +54,8 @@ module tester_3 (
       6'h02: begin
         out = (alu_out == mult_ans);
       end
-      6'h03: begin
-        out = (alu_out == add_ans);
+      6'h3f: begin
+        out = (alu_out == (a + b));
       end
       6'h20: begin
         out = (alu_out == shl_ans);
@@ -81,10 +81,10 @@ module tester_3 (
       6'h33: begin
         out = (alu_out == (a == b));
       end
-      6'h33: begin
+      6'h35: begin
         out = (alu_out == (a < b));
       end
-      6'h33: begin
+      6'h37: begin
         out = (alu_out == (a <= b));
       end
     endcase

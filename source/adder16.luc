@@ -14,17 +14,24 @@ module adder16 (
   always {
     s = 0;
     z = 0;
-    case(alufn[1:0]) {
-
-      2b00: //addition
-        s = a+b;
-      2b01: //subtraction
-        s = a-b;
-      2b10: //multiplication
-        s = a*b;
-      2b11: //error case by giving a fixed value. 
-        s = -839;
+    
+    if(alufn[0] == 0) //addition OR multiplication
+    {
+      if(alufn[1] == 0) //addition alufn[1:0] == 00
+      {
+        s = a + b;
+      }
+      if(alufn[1] == 1) //multiplication alufn[1:0] == 10
+      {
+        s = a * b;
+      }
     }
+    
+    if (alufn[0] == 1) //subtract
+    {
+      s = a-b;
+    }
+
     out = s;
 
     //all zeroes
@@ -36,7 +43,7 @@ module adder16 (
     v = (a[15]&&b[15]&&!s[15])||(!a[15]&&!b[15]&&s[15]);
     
     //negative
-    n = b[15];
+    n = s[15];
   }
 
 }
