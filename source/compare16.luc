@@ -1,3 +1,5 @@
+//this module does comparisons between A and B. 
+//A == B, A < B, A <= B
 module compare16 (
   // compare module takes in input z,v,n, alufn[2:1]
   input z, 
@@ -7,21 +9,21 @@ module compare16 (
   output out[16] 
 ){
   always{
-  out[15:0] = 16b0;
+  out[15:0] = 0;
 
+  //Select comparison operator
   case(alufn[2:1]){
-  
-  2b01: 
-    out[0] = z;
-    out[15:1] = 15b0;
+    2b01:  //A == B 
+      out[0] = z;
+      out[15:1] = 15b0;
 
-  2b10:
-    out[0] = n ^ v;
-    out[15:1] = 15b0;
+    2b10: //A < B 
+      out[0] = n ^ v;
+      out[15:1] = 0;
 
-  2b11:
-    out[0] = z | (n^v);
-    out[15:1] = 15b0;    
+    2b11: //A <= B
+      out[0] = z | (n^v);
+      out[15:1] = 0;    
   }
 
 

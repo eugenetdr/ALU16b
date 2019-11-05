@@ -1,3 +1,4 @@
+//this module handles Shift Left, Shift Right, and Shift Right Arithmetic
 module shift16
 (
     input a[16],
@@ -8,18 +9,19 @@ module shift16
 {
     always {
         out = 0;
+
+        //Select shift
         case(alufn[1:0])
         {
             //SHL
             2b00:
                 out = a << b;
-            //SRA
-            2b11:
-                out = $signed(a)>>>b;
             //SHR
             2b01:
                 out = a >> b;
-
+            //SRA
+            2b11:
+                out = $signed(a)>>>b; //docs require that "a" must be explicitly declared as a signed number to be correctly shifted right arithmetically
         }
     }
 }

@@ -1,3 +1,5 @@
+//This module handles the addition, subtraction, multiplication, z v and n values
+//**** THIS MODULE HANDLES A WRONG TEST CASE WITH OPCODE 000011 just to show that our tester indicates wrong values
 module adder16 (
     input a[16],
     input b[16],
@@ -14,20 +16,26 @@ module adder16 (
     z = 0;
     case(alufn[1:0]) {
 
-      2b00:
+      2b00: //addition
         s = a+b;
-      2b01:
+      2b01: //subtraction
         s = a-b;
-      2b10:
+      2b10: //multiplication
         s = a*b;
-      2b11:
+      2b11: //error case by giving a fixed value. 
         s = -839;
     }
     out = s;
+
+    //all zeroes
     if (s == 0) {
       z = 1;
     }
+
+    //overflow
     v = (a[15]&&b[15]&&!s[15])||(!a[15]&&!b[15]&&s[15]);
+    
+    //negative
     n = b[15];
   }
 

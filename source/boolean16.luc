@@ -1,3 +1,4 @@
+//This module handles bitwise boolean operations between a and b
 module boolean16 (
 	input a[16],
 	input b[16],
@@ -7,14 +8,16 @@ module boolean16 (
 
   always {
     out = 0;
+
+	//choose boolean operation
     case(alufn[3:0]) {
-    	4b1000:
+    	4b1000: //bitwise AND
     		out = a & b;
-    	4b1110:
+    	4b1110: //bitwise OR
     		out = a | b;
-    	4b0110:
+    	4b0110: //bitwise XOR
     		out = a ^ b;
-    	4b1010:
+    	4b1010: //"A" LDR
     		out = a;
     }
   }

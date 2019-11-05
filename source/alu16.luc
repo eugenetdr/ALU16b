@@ -1,3 +1,7 @@
+//This module handles the opcode routing into submodules:
+//submodules: adder, compare, boolean, shift
+//it also writes these modules to the output
+//this module acts as the selector multiplexer
 module alu16
 (
     input a[16],
@@ -15,8 +19,10 @@ module alu16
     sig n;
 
     always{
+        //initialize with value
         out = 0;
-    
+
+        //adder
         adder.alufn = alufn;
         adder.a = a;                
         adder.b = b;  
@@ -25,28 +31,32 @@ module alu16
         v = adder.v;              
         n = adder.n;              
         
+        //boolean
         boole.alufn = alufn;
         boole.a = a;                
         boole.b = b;                  
         
+        //shift
         shift.alufn = alufn;
         shift.a = a;                
         shift.b = b;         
 
+        //compare
         compare.alufn = alufn;
         compare.z = adder.z; 
         compare.v = adder.v;
         compare.n = adder.n;          
 
+        //mux selector
         case(alufn[5:4])
         {
-            2b00:
+            2b00: //SELECT ADDER
                 out = adder.out;                
-            2b01:
+            2b01: //SELECT BOOLEAN
                 out = boole.out;                
-            2b10:
+            2b10: //SELECT SHIFT
                 out = shift.out;                
-            2b11:
+            2b11: //SELECT COMPARE
                 out = compare.out;                
         }
     }
