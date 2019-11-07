@@ -1,16 +1,31 @@
 module tester
 (         
     //the opcode being selected
-    input alufn[6],   
+    input alufn_dip[6],   
     input b_dip[16],
+    
+    input clk,
+    input rst,
+    
+    input alu_z,
+    input alu_v,
+    input alu_n,
+    
 
     //the ans from our alu     
     input alu_out[16],
     
+    //checking mode
+    input mode,
+    input type,
+   
+    
     //the a and b values being passed into the aluout
     output a_out[16],
     output b_out[16],
-    output out
+    output out[8],
+    output alufn_out[6],
+    output fsmout[8]
 ) {
     sig a[16];
     sig b[16];
@@ -21,10 +36,54 @@ module tester
     sig shl_ans[16];
     sig shr_ans[16];
     sig sra_ans[16];
+    const PASS_NUM_STATES = 51;
+    const FAIL_NUM_STATES = 20;
+    sig err1;
+    sig err2;
+    sig err3;
+    sig err4;
+    sig err5;  
   
-    always {
+  
+  .clk(clk) {
+    .rst(rst){
+      counter slowclk(#SIZE(1),#DIV(25));
+    }
+  }
+  .clk(slowclk.value){
+    .rst(rst){
+       fsm pass_fsm = {ADD1, ADD2, ADD3, ADD4, ADD5, SUB1, SUB2, SUB3, SUB4, SUB5, NNUL, EQ1, EQ2, EQ3, EQ4, EQ5, EQ6, LT1, LT2, LT3, LT4, LT5, LE1, LE2, LE3, LE4, LE5, AND1, AND2, OR1, OR2, XOR1, XOR2, A1, A2, SHL1, SHL2, SHL3, SHL4, SHL5, SHR1, SHR2, SHR3, SHR4, SHR5, SRA1, SRA2, SRA3, SRA4, SRA5, SRA6};
+       fsm fail_fsm = {ADD1, ADD2, SUB1, SUB2, NNUL, EQ1, EQ2, LT1, LT2, LE1, AND1, OR1, OR2, XOR2, A2, SHL1, SHL2, SHR1, SHR2, SRA1};
+    }
+    //dff pass_count[$clog2(PASS_NUM_STATES)];    //counter to loop through maximum number of states
+    //dff fail_count[$clog2(FAIL_NUM_STATES)];    //counter to loop through maximum number of states
+
+  }  
+  
+
+  always {
+      
+    alufn_out = 0;
+    out = 0;
+    a = 0;
+    b = 0;
+    
+    err1 = 0;
+    err2 = 0;
+    err3 = 0;
+    err4 = 0;
+    err5 = 0;
+  
+    a_out = a;
+    b_out = b;
+    fsmout = 0;
+
+    if (mode) {
+      //if (type) {
         a = 16b1111110010111000;
         b = b_dip[15:0];
+        a_out = a;
+        b_out = b;
         add_ans = a+b;
         sub_ans = a-b;
         mult_ans = a*b;
@@ -34,58 +93,947 @@ module tester
         out = 0;
 
         //output these
-        a_out = a;
-        b_out = b;
-
-        case(alufn)
+        alufn_out = alufn_dip;
+        
+    
+        case(alufn_dip)
         {
             //addition
             6b000000:
-                out = (alu_out == add_ans);
+                out[7:0] = 8x{(alu_out == add_ans)};
             
             //subtraction
             6b000001:
-                out = (alu_out == sub_ans);
+                out[7:0] = 8x{(alu_out == sub_ans)};
             
             //multiplication
             6b000010:
-                out = (alu_out == mult_ans);
+                out[7:0] = 8x{(alu_out == mult_ans)};
 
             //false addition
             6b111111:
-                out = (alu_out == (a+b));
+                out[7:0] = 8x{(alu_out == (a+b))};
             //shift left
             6b100000:
-                out = (alu_out == shl_ans);
+                out[7:0] = 8x{(alu_out == shl_ans)};
             //shift right
             6b100001:
-                out = (alu_out == shr_ans);        
+                out[7:0] = 8x{(alu_out == shr_ans)};        
             //arithmetic right 
             6b100011:               
-                out = (alu_out == sra_ans);
+                out[7:0] = 8x{(alu_out == sra_ans)};
             //and
             6b011000:
-                out = (alu_out == (a & b));
+                out[7:0] = 8x{(alu_out == (a & b))};
             //or
             6b011110:
-                out =  (alu_out == (a | b));
+                out[7:0] = 8x{(alu_out == (a | b))};
             //xor
             6b010110:
-                out =  (alu_out == (a ^ b));
+                out[7:0] = 8x{(alu_out == (a ^ b))};
             //ldr
             6b011010:
-                out =  (alu_out == a);
+                out[7:0] = 8x{(alu_out == a)};
             //equal
             6b110011:
-                out = (alu_out == (a == b)); 
+                out[7:0] = 8x{(alu_out == (a == b))}; 
             //less
             6b110101:
-                out = (alu_out == (a < b)); 
+                out[7:0] = 8x{(alu_out == (a < b))}; 
             //less or equal
             6b110111:
-                out = (alu_out == (a <= b)); 
+                out[7:0] = 8x{(alu_out == (a <= b))}; 
     
      
-        }        
+        }  
+      //}
     }
+    else {
+ 
+      
+      //pass mode
+      if(type == 0)
+      {
+         fsmout = pass_fsm.q;
+         pass_fsm.d = pass_fsm.q + 1;
+        
+        if(pass_fsm.q == 50)
+        {
+          pass_fsm.d = 0;
+        }
+        
+        
+case (pass_fsm.q)      
+  {
+    pass_fsm.ADD1:
+      a = 16b0000000000000001;
+      b = 16b0000000000000001;
+      alufn_out = 16b000000;
+
+      err1 = alu_out != 16b0000000000000010;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.ADD2:
+      a = 16b1111111111111111;
+      b = 16b1111111111111111;
+      alufn_out = 16b000000;
+
+      err1 = alu_out != 16b1111111111111110;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.ADD3:
+      a = 16b0000000100000010;
+      b = 16b1111111011010101;
+      alufn_out = 16b000000;
+
+      err1 = alu_out != 16b1111111111010111;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.ADD4:
+      a = 16b1000000000000000;
+      b = 16b1000000000000000;
+      alufn_out = 16b000000;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.ADD5:
+      a = 16b0100000000000000;
+      b = 16b0100000000000000;
+      alufn_out = 16b000000;
+
+      err1 = alu_out != 16b1000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SUB1:
+      a = 16b0000000000000001;
+      b = 16b0000000000000001;
+      alufn_out = 16b000001;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SUB2:
+      a = 16b1111111111111111;
+      b = 16b1111111111111111;
+      alufn_out = 16b000001;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SUB3:
+      a = 16b0000110110101100;
+      b = 16b1111011000101000;
+      alufn_out = 16b000001;
+
+      err1 = alu_out != 16b0001011110000100;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SUB4:
+      a = 16b0100111000100000;
+      b = 16b1100010101101000;
+      alufn_out = 16b000001;
+
+      err1 = alu_out != 16b1000100010111000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SUB5:
+      a = 16b1000101011010000;
+      b = 16b0001001110001000;
+      alufn_out = 16b000001;
+
+      err1 = alu_out != 16b0111011101001000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.NNUL:
+      a = 16b0000010000011010;
+      b = 16b0000011111010000;
+      alufn_out = 16b000010;
+
+      err1 = alu_out != 16b0000101100100000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.EQ1:
+      a = 16b0000000000001011;
+      b = 16b0000000000011111;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.EQ2:
+      a = 16b0000000000011111;
+      b = 16b0000000000001011;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.EQ3:
+      a = 16b0000000000000000;
+      b = 16b0000000000000000;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.EQ4:
+      a = 16b1111111111111111;
+      b = 16b1111111111111111;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.EQ5:
+      a = 16b0000000000001011;
+      b = 16b0000000000001011;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.EQ6:
+      a = 16b0000000000000001;
+      b = 16b0000000000000001;
+      alufn_out = 16b110011;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LT1:
+      a = 16b0000000000001011;
+      b = 16b0000000000011111;
+      alufn_out = 16b110101;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.LT2:
+      a = 16b0000000000011111;
+      b = 16b0000000000001011;
+      alufn_out = 16b110101;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LT3:
+      a = 16b0000000000000000;
+      b = 16b0000000000000000;
+      alufn_out = 16b110101;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LT4:
+      a = 16b1111111111111111;
+      b = 16b1111111111111111;
+      alufn_out = 16b110101;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LT5:
+      a = 16b0000000000001011;
+      b = 16b0000000000001011;
+      alufn_out = 16b110101;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LE1:
+      a = 16b0000000000001011;
+      b = 16b0000000000011111;
+      alufn_out = 16b110111;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.LE2:
+      a = 16b0000000000011111;
+      b = 16b0000000000001011;
+      alufn_out = 16b110111;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LE3:
+      a = 16b0000000000000000;
+      b = 16b0000000000000000;
+      alufn_out = 16b110111;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LE4:
+      a = 16b1111111111111111;
+      b = 16b1111111111111111;
+      alufn_out = 16b110111;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.LE5:
+      a = 16b0000000000001011;
+      b = 16b0000000000001011;
+      alufn_out = 16b110111;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.AND1:
+      a = 16b0100011110001001;
+      b = 16b0001101000001110;
+      alufn_out = 16b011000;
+
+      err1 = alu_out != 16b0000001000001000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.AND2:
+      a = 16b1111111111111111;
+      b = 16b0000000000001010;
+      alufn_out = 16b011000;
+
+      err1 = alu_out != 16b0000000000001010;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.OR1:
+      a = 16b1000100010000000;
+      b = 16b1001100101001001;
+      alufn_out = 16b011110;
+
+      err1 = alu_out != 16b1001100111001001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.OR2:
+      a = 16b1111111111111111;
+      b = 16b0010000000001010;
+      alufn_out = 16b011110;
+
+      err1 = alu_out != 16b1111111111111111;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.XOR1:
+      a = 16b1001101000100110;
+      b = 16b1000000000001000;
+      alufn_out = 16b010110;
+
+      err1 = alu_out != 16b0001101000101110;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.XOR2:
+      a = 16b1101010100100100;
+      b = 16b1111111111100111;
+      alufn_out = 16b010110;
+
+      err1 = alu_out != 16b0010101011000011;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.A1:
+      a = 16b1001100110011001;
+      b = 16b0000000000001000;
+      alufn_out = 16b011010;
+
+      err1 = alu_out != 16b1001100110011001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.A2:
+      a = 16b0000000100000001;
+      b = 16b0111001110010111;
+      alufn_out = 16b011010;
+
+      err1 = alu_out != 16b0000000100000001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHL1:
+      a = 16b0000000000000001;
+      b = 16b0000000000000001;
+      alufn_out = 16b100000;
+
+      err1 = alu_out != 16b0000000000000010;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHL2:
+      a = 16b0000000000000001;
+      b = 16b0000000000001111;
+      alufn_out = 16b100000;
+
+      err1 = alu_out != 16b1000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHL3:
+      a = 16b1111111111111111;
+      b = 16b0000000000001010;
+      alufn_out = 16b100000;
+
+      err1 = alu_out != 16b1111110000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHL4:
+      a = 16b1001100110011001;
+      b = 16b0000000000001000;
+      alufn_out = 16b100000;
+
+      err1 = alu_out != 16b1001100100000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SHL5:
+      a = 16b1000100010000000;
+      b = 16b0000000000001001;
+      alufn_out = 16b100000;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SHR1:
+      a = 16b1000000000000000;
+      b = 16b0000000000000001;
+      alufn_out = 16b100001;
+
+      err1 = alu_out != 16b0100000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHR2:
+      a = 16b1000000000000000;
+      b = 16b0000000000001111;
+      alufn_out = 16b100001;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SHR3:
+      a = 16b1111111111111111;
+      b = 16b0000000000001010;
+      alufn_out = 16b100001;
+
+      err1 = alu_out != 16b0000000000111111;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SHR4:
+      a = 16b1001100110011001;
+      b = 16b0000000000001000;
+      alufn_out = 16b100001;
+
+      err1 = alu_out != 16b0000000010011001;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 1;                                        
+
+
+    pass_fsm.SHR5:
+      a = 16b0000000100010001;
+      b = 16b0000000000001001;
+      alufn_out = 16b100001;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 0;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA1:
+      a = 16b1000000000000000;
+      b = 16b0000000000000001;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b1100000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA2:
+      a = 16b0100000000000000;
+      b = 16b0000000000001110;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b0000000000000001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA3:
+      a = 16b1111111111111111;
+      b = 16b0000000000001010;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b1111111111111111;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA4:
+      a = 16b1001100110011001;
+      b = 16b0000000000001000;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b1111111110011001;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 1;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA5:
+      a = 16b0000000100010001;
+      b = 16b0000000000001001;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b0000000000000000;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+
+
+    pass_fsm.SRA6:
+      a = 16b0111111111111111;
+      b = 16b0000000000000111;
+      alufn_out = 16b100011;
+
+      err1 = alu_out != 16b0000000011111111;
+      err2 = alu_z != 1;                    
+      err3 = alu_v != 0;                   
+      err4 = alu_n != 0;                                        
+                                      
+  }
+
+    
+      }
+      else //fail mode
+      {
+         fsmout = fail_fsm.q;
+         fail_fsm.d = fail_fsm.q + 1;
+        if(fail_fsm.q == 20)
+        {
+          fail_fsm.d = 0;
+        }
+        
+        
+  case (fail_fsm.q)      
+    {
+      fail_fsm.ADD1:
+        a = 16b0000000000000001;
+        b = 16b0000000000000001;
+        alufn_out = 16b010000;
+  
+        err1 = alu_out != 16b0000000000000010;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.ADD2:
+        a = 16b1111111111111111;
+        b = 16b1111111111111111;
+        alufn_out = 16b000000;
+  
+        err1 = alu_out != 16b1111111111111110;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SUB1:
+        a = 16b0000000000000001;
+        b = 16b0000000000000001;
+        alufn_out = 16b000001;
+  
+        err1 = alu_out != 16b0000000000000000;
+        err2 = alu_z != 1;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SUB2:
+        a = 16b1111111111111111;
+        b = 16b1111111111111111;
+        alufn_out = 16b000001;
+  
+        err1 = alu_out != 16b0000000000000000;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.NNUL:
+        a = 16b0000010000011010;
+        b = 16b0000011111010000;
+        alufn_out = 16b000010;
+  
+        err1 = alu_out != 16b0000101100100001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.EQ1:
+        a = 16b0000000000001011;
+        b = 16b0000000000011111;
+        alufn_out = 16b110011;
+  
+        err1 = alu_out != 16b0000000000000001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.EQ2:
+        a = 16b0000000000011111;
+        b = 16b0000000000001011;
+        alufn_out = 16b110011;
+  
+        err1 = alu_out != 16b0000000000000000;
+        err2 = alu_z != 1;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.LT1:
+        a = 16b0000000000001011;
+        b = 16b0000000000011111;
+        alufn_out = 16b110101;
+  
+        err1 = alu_out != 16b0000000000000001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.LT2:
+        a = 16b0000000000011111;
+        b = 16b0000000000001011;
+        alufn_out = 16b110101;
+  
+        err1 = alu_out != 16b0000000000000000;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.LE1:
+        a = 16b0000000000001011;
+        b = 16b0000000000011111;
+        alufn_out = 16b110110;
+  
+        err1 = alu_out != 16b0000000000000001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.AND1:
+        a = 16b0100011110001001;
+        b = 16b0001101000001110;
+        alufn_out = 16b011000;
+  
+        err1 = alu_out != 16b0000001000001001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.OR1:
+        a = 16b1000100010000000;
+        b = 16b1001100101001001;
+        alufn_out = 16b011110;
+  
+        err1 = alu_out != 16b1001100111001001;
+        err2 = alu_z != 1;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.OR2:
+        a = 16b1111111111111111;
+        b = 16b0010000000001010;
+        alufn_out = 16b011110;
+  
+        err1 = alu_out != 16b1111111111111111;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.XOR2:
+        a = 16b1101010100100100;
+        b = 16b1111111111100111;
+        alufn_out = 16b010110;
+  
+        err1 = alu_out != 16b0010101011000011;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.A2:
+        a = 16b0000000100000001;
+        b = 16b0111001110010111;
+        alufn_out = 16b011011;
+  
+        err1 = alu_out != 16b0000000100000001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SHL1:
+        a = 16b0000000000000001;
+        b = 16b0000000000000001;
+        alufn_out = 16b100000;
+  
+        err1 = alu_out != 16b0000000000000000;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SHL2:
+        a = 16b0000000000000001;
+        b = 16b0000000000001111;
+        alufn_out = 16b100000;
+  
+        err1 = alu_out != 16b1000000000000000;
+        err2 = alu_z != 1;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SHR1:
+        a = 16b1000000000000000;
+        b = 16b0000000000000001;
+        alufn_out = 16b100001;
+  
+        err1 = alu_out != 16b0100000000000000;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 0;                   
+        err4 = alu_n != 0;                                        
+  
+  
+      fail_fsm.SHR2:
+        a = 16b1000000000000000;
+        b = 16b0000000000001111;
+        alufn_out = 16b100001;
+  
+        err1 = alu_out != 16b0000000000000001;
+        err2 = alu_z != 0;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 1;                                        
+  
+  
+      fail_fsm.SRA1:
+        a = 16b1000000000000000;
+        b = 16b0000000000000001;
+        alufn_out = 16b100010;
+  
+        err1 = alu_out != 16b1100000000000000;
+        err2 = alu_z != 1;                    
+        err3 = alu_v != 1;                   
+        err4 = alu_n != 0;                                        
+                                        
+    }
+      }
+      
+             case(alufn_dip)
+        {
+            //addition
+            6b000000:
+               err5 = 0;
+
+            //subtraction
+            6b000001:
+              err5 = 0;
+
+            //multiplication
+            6b000010:
+                      err5 = 0;
+
+
+            //false addition
+            6b111111:
+                      err5 = 0;
+
+            //shift left
+            6b100000:
+                      err5 = 0;
+
+            //shift right
+            6b100001:
+                      err5 = 0;
+
+            //arithmetic right 
+            6b100011: 
+                      err5 = 0;
+              
+            //and
+            6b011000:
+                      err5 = 0;
+
+            //or
+            6b011110:
+                      err5 = 0;
+
+            //xor
+            6b010110:
+                      err5 = 0;
+
+            //ldr
+            6b011010:
+                      err5 = 0;
+
+            //equal
+            6b110011:
+                      err5 = 0;
+
+            //less
+            6b110101:
+                      err5 = 0;
+
+            //less or equal
+            6b110111:
+              err5 = 0;
+
+          default:
+            err5 = 1;
+      }
+      a_out = a;
+      b_out = b;
+      out[7] = err1;
+      out[6] = err2;
+      out[5] = err3;
+      out[4] = err4;
+      out[3] = err5;
+      
+      
+    }    
+  }
 }

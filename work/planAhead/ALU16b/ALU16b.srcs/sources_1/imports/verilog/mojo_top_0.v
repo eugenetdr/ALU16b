@@ -35,31 +35,58 @@ module mojo_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
+  wire [1-1:0] M_slowclk_value;
+  counter_2 slowclk (
+    .clk(clk),
+    .rst(rst),
+    .value(M_slowclk_value)
+  );
+  wire [16-1:0] M_test_a_out;
+  wire [16-1:0] M_test_b_out;
+  wire [8-1:0] M_test_out;
+  wire [6-1:0] M_test_alufn_out;
+  wire [8-1:0] M_test_fsmout;
+  reg [6-1:0] M_test_alufn_dip;
+  reg [16-1:0] M_test_b_dip;
+  reg [1-1:0] M_test_alu_z;
+  reg [1-1:0] M_test_alu_v;
+  reg [1-1:0] M_test_alu_n;
+  reg [16-1:0] M_test_alu_out;
+  reg [1-1:0] M_test_mode;
+  reg [1-1:0] M_test_type;
+  tester_3 test (
+    .clk(clk),
+    .rst(rst),
+    .alufn_dip(M_test_alufn_dip),
+    .b_dip(M_test_b_dip),
+    .alu_z(M_test_alu_z),
+    .alu_v(M_test_alu_v),
+    .alu_n(M_test_alu_n),
+    .alu_out(M_test_alu_out),
+    .mode(M_test_mode),
+    .type(M_test_type),
+    .a_out(M_test_a_out),
+    .b_out(M_test_b_out),
+    .out(M_test_out),
+    .alufn_out(M_test_alufn_out),
+    .fsmout(M_test_fsmout)
+  );
   
   wire [16-1:0] M_alu_out;
+  wire [1-1:0] M_alu_z;
+  wire [1-1:0] M_alu_v;
+  wire [1-1:0] M_alu_n;
   reg [16-1:0] M_alu_a;
   reg [16-1:0] M_alu_b;
   reg [6-1:0] M_alu_alufn;
-  alu16_2 alu (
+  alu16_4 alu (
     .a(M_alu_a),
     .b(M_alu_b),
     .alufn(M_alu_alufn),
-    .out(M_alu_out)
-  );
-  
-  wire [16-1:0] M_test_a_out;
-  wire [16-1:0] M_test_b_out;
-  wire [1-1:0] M_test_out;
-  reg [6-1:0] M_test_alufn;
-  reg [16-1:0] M_test_b_dip;
-  reg [16-1:0] M_test_alu_out;
-  tester_3 test (
-    .alufn(M_test_alufn),
-    .b_dip(M_test_b_dip),
-    .alu_out(M_test_alu_out),
-    .a_out(M_test_a_out),
-    .b_out(M_test_b_out),
-    .out(M_test_out)
+    .out(M_alu_out),
+    .z(M_alu_z),
+    .v(M_alu_v),
+    .n(M_alu_n)
   );
   
   always @* begin
@@ -72,15 +99,24 @@ module mojo_top_0 (
     io_led = 24'h000000;
     io_seg = 8'hff;
     io_sel = 4'hf;
-    M_test_alufn = io_dip[16+2+5-:6];
-    M_alu_alufn = io_dip[16+2+5-:6];
+    M_test_mode = io_dip[16+7+0-:1];
+    M_test_type = io_dip[16+6+0-:1];
+    M_test_alufn_dip = io_dip[16+0+5-:6];
+    M_alu_alufn = M_test_alufn_out[0+5-:6];
+    M_test_alu_z = M_alu_z;
+    M_test_alu_v = M_alu_v;
+    M_test_alu_n = M_alu_n;
     M_alu_a = M_test_a_out;
     M_alu_b = M_test_b_out;
     M_test_b_dip[8+7-:8] = io_dip[8+7-:8];
     M_test_b_dip[0+7-:8] = io_dip[0+7-:8];
     M_test_alu_out = M_alu_out;
-    io_led[0+7-:8] = M_alu_out[0+7-:8];
-    io_led[8+7-:8] = M_alu_out[8+7-:8];
-    io_led[16+7-:8] = {4'h8{M_test_out}};
+    if (io_dip[16+7+0-:1]) begin
+      io_led[0+7-:8] = M_alu_out[0+7-:8];
+      io_led[8+7-:8] = M_alu_out[8+7-:8];
+    end else begin
+      io_led[0+0+7-:8] = M_test_fsmout;
+    end
+    io_led[16+7-:8] = M_test_out;
   end
 endmodule

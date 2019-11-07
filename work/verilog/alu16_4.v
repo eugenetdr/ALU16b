@@ -4,11 +4,14 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module alu16_2 (
+module alu16_4 (
     input [15:0] a,
     input [15:0] b,
     input [5:0] alufn,
-    output reg [15:0] out
+    output reg [15:0] out,
+    output reg z,
+    output reg v,
+    output reg n
   );
   
   
@@ -20,7 +23,7 @@ module alu16_2 (
   reg [16-1:0] M_adder_a;
   reg [16-1:0] M_adder_b;
   reg [6-1:0] M_adder_alufn;
-  adder16_4 adder (
+  adder16_5 adder (
     .a(M_adder_a),
     .b(M_adder_b),
     .alufn(M_adder_alufn),
@@ -35,7 +38,7 @@ module alu16_2 (
   reg [1-1:0] M_compare_v;
   reg [1-1:0] M_compare_n;
   reg [6-1:0] M_compare_alufn;
-  compare16_5 compare (
+  compare16_6 compare (
     .z(M_compare_z),
     .v(M_compare_v),
     .n(M_compare_n),
@@ -47,7 +50,7 @@ module alu16_2 (
   reg [16-1:0] M_boole_a;
   reg [16-1:0] M_boole_b;
   reg [6-1:0] M_boole_alufn;
-  boolean16_6 boole (
+  boolean16_7 boole (
     .a(M_boole_a),
     .b(M_boole_b),
     .alufn(M_boole_alufn),
@@ -58,18 +61,12 @@ module alu16_2 (
   reg [16-1:0] M_shift_a;
   reg [16-1:0] M_shift_b;
   reg [6-1:0] M_shift_alufn;
-  shift16_7 shift (
+  shift16_8 shift (
     .a(M_shift_a),
     .b(M_shift_b),
     .alufn(M_shift_alufn),
     .out(M_shift_out)
   );
-  
-  reg z;
-  
-  reg v;
-  
-  reg n;
   
   always @* begin
     out = 1'h0;

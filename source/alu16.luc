@@ -8,15 +8,15 @@ module alu16
     input b[16],
     input alufn[6],
     
-    output out[16]
+    output out[16],
+    output z,
+    output v,
+    output n
 ) {
     adder16 adder;
     compare16 compare;
     boolean16 boole;
     shift16 shift;
-    sig z;
-    sig v;
-    sig n;
 
     always{
         //initialize with value

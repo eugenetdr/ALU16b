@@ -11,5 +11,6 @@
     <ucf lib="true">io_shield.ucf</ucf>
     <ucf lib="true">mojo.ucf</ucf>
     <component>reset_conditioner.luc</component>
+    <component>counter.luc</component>
   </files>
 </project>
