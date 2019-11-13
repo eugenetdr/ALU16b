@@ -139,10 +139,10 @@ module tester
                 out[7:0] = 8x{(alu_out == (a == b))}; 
             //less
             6b110101:
-                out[7:0] = 8x{(alu_out == (a < b))}; 
+                out[7:0] = 8x{(alu_out == ($signed(a) < $signed(b)))}; 
             //less or equal
             6b110111:
-                out[7:0] = 8x{(alu_out == (a <= b))}; 
+                out[7:0] = 8x{(alu_out == ($signed(a) <= $signed(b)))}; 
     
      
         }  

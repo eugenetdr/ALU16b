@@ -10,37 +10,28 @@ module adder16 (
     output n
   ) {
   sig s[16];
+  sig xb[16];
   
   always {
     s = 0;
     z = 0;
-    
-    if(alufn[0] == 0) //addition OR multiplication
-    {
-      if(alufn[1] == 0) //addition alufn[1:0] == 00
-      {
-        s = a + b;
-      }
-      if(alufn[1] == 1) //multiplication alufn[1:0] == 10
-      {
-        s = a * b;
-      }
-    }
-    
-    if (alufn[0] == 1) //subtract
-    {
-      s = a-b;
-    }
-
-    out = s;
+    xb = b ^ 16x{alufn[0]};    
+    s = a + xb + alufn[0]; //multiplication and subtraction
 
     //all zeroes
     if (s == 0) {
       z = 1;
     }
+    
+    if(alufn[1:0] == 2b10) //multiplication
+    {
+      s = a*b;
+    }  
+    
+    out = s;
 
     //overflow
-    v = (a[15]&&b[15]&&!s[15])||(!a[15]&&!b[15]&&s[15]);
+    v = (a[15] && xb[15] && !s[15]) || (!a[15] && !xb[15] && s[15]);
     
     //negative
     n = s[15];

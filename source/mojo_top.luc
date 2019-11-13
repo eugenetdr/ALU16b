@@ -26,7 +26,7 @@ module mojo_top (
     reset_conditioner reset_cond;
     .rst(rst){
       counter slowclk(#SIZE(1),#DIV(25));
-
+      
       tester test;
     }
   }

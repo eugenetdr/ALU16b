@@ -1,0 +1,8 @@
+INTSTYLE=pa
+INFILE=/home/mooselliot/Desktop/Projects/ALU16b/work/planAhead/ALU16/ALU16.runs/impl_1/mojo_top_0_routed.ncd
+OUTFILE=/home/mooselliot/Desktop/Projects/ALU16b/work/planAhead/ALU16/ALU16.runs/impl_1/mojo_top_0.bit
+FAMILY=Spartan6
+PART=xc6slx9-2tqg144
+WORKINGDIR=/home/mooselliot/Desktop/Projects/ALU16b/work/planAhead/ALU16/ALU16.runs/impl_1
+LICENSE=WebPack
+USER_INFO=211842887_0_0_155
